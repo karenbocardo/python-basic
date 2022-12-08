@@ -15,9 +15,17 @@ Examples:
     No numbers entered
 
 """
-
+from statistics import mean
 
 def read_numbers(n: int) -> str:
-    ...
-
+    numbers = list()
+    for i in range(n):
+        x = input() # ??? how is the input supposed to be?
+        if x.isnumeric():
+            numbers.append(float(x))
+    if numbers:
+        avg = mean(numbers)
+        return f"Avg: {avg:.2f}"
+    else:
+        return "No numbers entered"
 
