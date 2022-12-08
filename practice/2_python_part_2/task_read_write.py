@@ -13,3 +13,14 @@ Example:
 
     result.txt(content: "23, 78, 3")
 """
+import os
+
+content = list()
+
+folder = "./files"
+for file in os.listdir(folder):
+    with open(os.path.join(folder, file)) as f:
+        content.append(f.read())
+
+with open("result.txt", "w") as f:
+    f.write(", ".join(content))
