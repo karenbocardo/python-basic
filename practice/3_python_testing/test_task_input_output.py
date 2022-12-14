@@ -12,7 +12,7 @@ https://docs.python.org/3/library/unittest.mock.html#unittest.mock.patch
 TIP: for testing builtin input() function create another function which return input() and mock returned value
 """
 from unittest.mock import patch
-
+#from practice._2_python_part_2 import task_input_output
 
 def test_read_numbers_without_text_input():
     ...

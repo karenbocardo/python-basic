@@ -15,12 +15,17 @@ Example:
 """
 import os
 
-content = list()
+res = "result.txt"
 
-folder = "./files"
-for file in os.listdir(folder):
-    with open(os.path.join(folder, file)) as f:
-        content.append(f.read())
+def read_write_values(folder="./files"):
+    content = list()
 
-with open("result.txt", "w") as f:
-    f.write(", ".join(content))
+    for file in os.listdir(folder):
+        with open(os.path.join(folder, file)) as f:
+            content.append(f.read())
+
+    with open(res, "w") as f:
+        f.write(", ".join(content))
+
+if __name__ == '__main__':
+    read_write_values()
