@@ -15,17 +15,17 @@ Example:
 """
 import os
 
-res = "result.txt"
-
-def read_write_values(folder="./files"):
+def read_write_values(folder="./files", res="result.txt"):
     content = list()
 
     for file in os.listdir(folder):
         with open(os.path.join(folder, file)) as f:
             content.append(f.read())
-
+    
+    line = ", ".join(content)
     with open(res, "w") as f:
-        f.write(", ".join(content))
+        f.write(line)
+    return line
 
 if __name__ == '__main__':
     read_write_values()
