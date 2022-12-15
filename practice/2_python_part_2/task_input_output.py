@@ -19,8 +19,10 @@ from statistics import mean
 
 def read_numbers(n: int) -> str:
     numbers = list()
+    input_line = input() # changing input to one string separated by commas + space
+    input_line = input_line.split(', ')
     for i in range(n):
-        x = input() # ??? how is the input supposed to be?
+        x = input_line[i]
         if x.isnumeric():
             numbers.append(float(x))
     if numbers:
@@ -28,4 +30,3 @@ def read_numbers(n: int) -> str:
         return f"Avg: {avg:.2f}"
     else:
         return "No numbers entered"
-
