@@ -5,7 +5,7 @@ Also check corner-cases, for example if homework number of days is negative.
 """
 import pytest
 import datetime
-from practice._2_python_part_2 import task_classes
+task_classes = importlib.import_module('.task_classes', 'practice.2_python_part_2')
 
 @pytest.fixture
 def teacher():

@@ -8,7 +8,10 @@ TIP: to test output of print() function use capfd fixture
 https://stackoverflow.com/a/20507769
 """
 import pytest
-from practice._2_python_part_2 import task_exceptions
+import importlib
+
+# from practice._2_python_part_2 import task_exceptions
+task_exceptions = importlib.import_module('.task_exceptions', 'practice.2_python_part_2')
 
 def test_division_ok(capfd):
     assert task_exceptions.division(6, 2) == 3

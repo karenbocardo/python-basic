@@ -7,6 +7,4 @@ https://docs.pytest.org/en/6.2.x/tmpdir.html
 import pytest
 import importlib
 
-from practice._2_python_part_2 import task_read_write
-
  
