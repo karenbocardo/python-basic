@@ -17,13 +17,12 @@ import os
 
 def read_write_values(folder="./files", res="result.txt"):
     content = list()
-
-    for file in os.listdir(folder):
-        with open(os.path.join(folder, file)) as f:
+    for file in sorted(os.listdir(folder)):
+        with open(os.path.join(folder, file), encoding="utf-8") as f:
             content.append(f.read())
     
     line = ", ".join(content)
-    with open(res, "w") as f:
+    with open(res, "w", encoding="utf-8") as f:
         f.write(line)
     return line
 
