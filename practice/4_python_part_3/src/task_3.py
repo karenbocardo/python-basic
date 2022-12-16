@@ -22,6 +22,3 @@ def is_http_domain(domain: str) -> bool:
 """
 write tests for is_http_domain function
 """
-
-# @TODO delete this lines
-print(is_http_domain('https://ru.wikipedia.org/'))
