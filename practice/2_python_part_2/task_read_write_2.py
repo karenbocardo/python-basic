@@ -24,7 +24,7 @@ def generate_words(n=20):
 
 def write_words(words, filename, encoding, separator, reverse=False):
     if reverse:
-        words.reverse()
+        words = reversed(words)
     with open(filename, "w", encoding=encoding) as f:
         f.writelines(separator.join(words))
 
@@ -35,5 +35,6 @@ def write_files(words, filenames):
 
 if __name__ == '__main__':
     words = generate_words(3)
-    filenames = (f"file_{x+1}.txt" for x in range(2))
+    print(f"{words=}")
+    filenames = [f"file_{x+1}.txt" for x in range(2)]
     write_files(words, filenames)
