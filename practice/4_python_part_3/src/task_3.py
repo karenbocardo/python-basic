@@ -9,13 +9,19 @@ Note that address may have several domain levels
     >>>is_http_domain('griddynamics.com')
     False
 """
+# pattern found in https://www.regextester.com/105539
 import re
 
 
 def is_http_domain(domain: str) -> bool:
-    ...
-
+    pattern = r"^(http(s)?:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$"
+    if re.fullmatch(pattern, domain) is None:
+        return False
+    return True
 
 """
 write tests for is_http_domain function
 """
+
+# @TODO delete this lines
+print(is_http_domain('https://ru.wikipedia.org/'))
