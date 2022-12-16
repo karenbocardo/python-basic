@@ -25,6 +25,3 @@ def math_calculate(function: str, *args):
 """
 Write tests for math_calculate function
 """
-
-import doctest
-doctest.testmod()
