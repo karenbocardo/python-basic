@@ -7,7 +7,6 @@ https://docs.pytest.org/en/6.2.x/tmpdir.html
 import pytest
 import importlib
 task = importlib.import_module('.task_read_write', 'practice.2_python_part_2')
-import random
 
 def test_read_write(tmpdir):
     numbers = [54,577,84,5,14,51,23,22,1]
