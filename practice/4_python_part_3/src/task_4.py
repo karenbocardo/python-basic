@@ -48,6 +48,8 @@ def print_name_address(args: argparse.Namespace) -> None:
         print(new_dict)
         dict_ls.append(new_dict)
     
+    return dict_ls
+    
 
 """
 Write test for print_name_address function
