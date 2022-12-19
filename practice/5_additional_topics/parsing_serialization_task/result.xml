@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<weather country="Spain" date="2022-12-19">
+	<summary mean_temp="0" mean_wind_speed="0" coldest_place="0" warmest_place="0" windiest_place="0"/>
+	<cities>
+		<Barcelona min_temp="21.66" max_temp="27.38" mean_temp="24.21" min_wind_speed="21.66" max_wind_speed="27.38" mean_wind_speed="24.21"/>
+		<Logrono min_temp="16.35" max_temp="23.77" mean_temp="19.13" min_wind_speed="16.35" max_wind_speed="23.77" mean_wind_speed="19.13"/>
+		<Madrid min_temp="14.66" max_temp="21.35" mean_temp="17.89" min_wind_speed="14.66" max_wind_speed="21.35" mean_wind_speed="17.89"/>
+		<Merida min_temp="15.38" max_temp="24.54" mean_temp="19.53" min_wind_speed="15.38" max_wind_speed="24.54" mean_wind_speed="19.53"/>
+		<Murcia min_temp="22.64" max_temp="30.26" mean_temp="25.64" min_wind_speed="22.64" max_wind_speed="30.26" mean_wind_speed="25.64"/>
+		<Oviedo min_temp="14.26" max_temp="21.96" mean_temp="17.00" min_wind_speed="14.26" max_wind_speed="21.96" mean_wind_speed="17.00"/>
+		<Palma min_temp="22.91" max_temp="30.37" mean_temp="26.21" min_wind_speed="22.91" max_wind_speed="30.37" mean_wind_speed="26.21"/>
+		<Pamplona min_temp="16.01" max_temp="25.76" mean_temp="20.45" min_wind_speed="16.01" max_wind_speed="25.76" mean_wind_speed="20.45"/>
+		<Santa Cruz de Tenerife min_temp="19.63" max_temp="25.25" mean_temp="22.18" min_wind_speed="19.63" max_wind_speed="25.25" mean_wind_speed="22.18"/>
+		<Santander min_temp="16.92" max_temp="23.28" mean_temp="19.85" min_wind_speed="16.92" max_wind_speed="23.28" mean_wind_speed="19.85"/>
+		<Santiago de Compostela min_temp="13.67" max_temp="19.84" mean_temp="16.18" min_wind_speed="13.67" max_wind_speed="19.84" mean_wind_speed="16.18"/>
+		<Seville min_temp="17.24" max_temp="27.13" mean_temp="21.60" min_wind_speed="17.24" max_wind_speed="27.13" mean_wind_speed="21.60"/>
+		<Toledo min_temp="16.11" max_temp="23.49" mean_temp="19.52" min_wind_speed="16.11" max_wind_speed="23.49" mean_wind_speed="19.52"/>
+		<Valencia min_temp="20.90" max_temp="27.57" mean_temp="23.31" min_wind_speed="20.90" max_wind_speed="27.57" mean_wind_speed="23.31"/>
+		<Valladolid min_temp="12.56" max_temp="19.51" mean_temp="15.61" min_wind_speed="12.56" max_wind_speed="19.51" mean_wind_speed="15.61"/>
+		<Vitoria-Gasteiz min_temp="14.73" max_temp="22.95" mean_temp="17.89" min_wind_speed="14.73" max_wind_speed="22.95" mean_wind_speed="17.89"/>
+		<Zaragoza min_temp="16.92" max_temp="26.61" mean_temp="21.16" min_wind_speed="16.92" max_wind_speed="26.61" mean_wind_speed="21.16"/>
+	</cities>
+</weather>
