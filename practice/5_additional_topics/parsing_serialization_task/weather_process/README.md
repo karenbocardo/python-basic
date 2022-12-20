@@ -1,9 +1,9 @@
 # process weather application
 
-run with:
+run 
 
 ```bash
-$ python3 weather_process
+$ python3 -m weather_process
 ```
 
 inside `parsing_serialization_task` directory

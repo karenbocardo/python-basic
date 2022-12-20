@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
-<weather country="Spain" date="2022-12-19">
-	<summary mean_temp="0" mean_wind_speed="0" coldest_place="0" warmest_place="0" windiest_place="0"/>
+<weather country="Spain" date="2022-12-20">
+	<summary mean_temp="20.43" mean_wind_speed="20.43" coldest_place="Valladolid" warmest_place="Palma" windiest_place="26.21"/>
 	<cities>
 		<Barcelona min_temp="21.66" max_temp="27.38" mean_temp="24.21" min_wind_speed="21.66" max_wind_speed="27.38" mean_wind_speed="24.21"/>
 		<Logrono min_temp="16.35" max_temp="23.77" mean_temp="19.13" min_wind_speed="16.35" max_wind_speed="23.77" mean_wind_speed="19.13"/>

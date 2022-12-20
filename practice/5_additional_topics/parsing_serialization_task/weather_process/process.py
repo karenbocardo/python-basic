@@ -4,7 +4,9 @@ from statistics import mean
 from datetime import datetime
 
 global cities
+global summary
 cities = dict()
+summary = dict()
 
 def process_city(city, data):
     temp = list()
@@ -28,14 +30,21 @@ def process_city(city, data):
     cities[city] = stats
 
 def process_country():
-    coldest_place = min(cities, key=lambda index: cities[index]['mean_temp'])
-    warmest_place = max(cities, key=lambda index: cities[index]['mean_temp'])
-    meanx = max(city['mean_wind_speed'] for city in cities.values())
-    print(f'{coldest_place=}, {warmest_place=}, {meanx=}')
+    summary['mean_temp'] = mean([city['mean_temp'] for city in cities.values()])
+    summary['mean_wind_speed'] = mean([city['mean_wind_speed'] for city in cities.values()])
+    summary['coldest_place'] = min(cities, key=lambda index: cities[index]['mean_temp'])
+    summary['warmest_place'] = max(cities, key=lambda index: cities[index]['mean_temp'])
+    summary['windiest_place'] = max(city['mean_wind_speed'] for city in cities.values())
 
 def save_result():
     from xml.dom import minidom
-    
+
+    def write_attribs(dicc, elem):
+        for stat, value in dicc.items():
+            if type(value) is not str:
+                value = f'{value:.2f}'
+            elem.setAttribute(stat, value)
+
     root = minidom.Document()
     
     # weather
@@ -45,21 +54,15 @@ def save_result():
     root.appendChild(weather)
     
     # summary
-    summary = root.createElement('summary')
-    summary.setAttribute('mean_temp', '0')
-    summary.setAttribute('mean_wind_speed', '0')
-    summary.setAttribute('coldest_place', '0')
-    summary.setAttribute('warmest_place', '0')
-    summary.setAttribute('windiest_place', '0')
-    weather.appendChild(summary)
+    summary_elem = root.createElement('summary')
+    write_attribs(summary, summary_elem)
+    weather.appendChild(summary_elem)
 
     # cities
-    
     cities_elem = root.createElement('cities')
     for city, stats in cities.items():
         city_elem = root.createElement(city)
-        for stat, value in stats.items():
-            city_elem.setAttribute(stat, f'{value:.2f}')
+        write_attribs(stats, city_elem)
         cities_elem.appendChild(city_elem)
     weather.appendChild(cities_elem)
 
