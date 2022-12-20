@@ -32,3 +32,29 @@ Links:
     - lxml docs: https://lxml.de/
 """
 
+# https://blog.jovian.ai/web-scraping-yahoo-finance-using-python-7c4612fab70c
+# https://proxiesapi-com.medium.com/scraping-most-active-stocks-data-from-yahoo-finance-with-python-and-beautiful-soup-79a218c91835
+
+from urllib.request import urlopen
+import requests
+from bs4 import BeautifulSoup
+# import csv 
+# import pandas as pd 
+
+
+def get_page(url):
+    """Download a webpage and return a beautiful soup doc"""
+    response = requests.get(url,  headers={'User-Agent': 'Custom'}) # python user agent was not working
+    if not response.ok:
+        print('Status code:', response.status_code)
+        raise Exception('Failed to load page {}'.format(url))
+    page_content = response.text
+    doc = BeautifulSoup(page_content, 'html.parser')
+    return doc
+
+url = 'https://finance.yahoo.com/most-active'
+doc = get_page(url)
+print('Type of doc: ', type(doc))
+print(doc.find('title')) # <title>Most Active Stocks Today - Yahoo Finance</title>
+div_tags = doc.find_all('div', {'class': "Ov(h) Pend(44px) Pstart(25px)"})
+print(len(div_tags))
