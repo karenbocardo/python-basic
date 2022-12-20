@@ -23,18 +23,18 @@ def process_city(city, data):
     stats['mean_temp'] = mean(temp)
 
     # wind speed statistics for the city
-    stats['min_wind_speed'] = min(temp)
-    stats['max_wind_speed'] = max(temp)
-    stats['mean_wind_speed'] = mean(temp)
+    stats['min_wind_speed'] = min(wind_speed)
+    stats['max_wind_speed'] = max(wind_speed)
+    stats['mean_wind_speed'] = mean(wind_speed)
 
-    cities[city] = stats
+    cities[city.split()[0]] = stats # just use first name of city
 
 def process_country():
     summary['mean_temp'] = mean([city['mean_temp'] for city in cities.values()])
     summary['mean_wind_speed'] = mean([city['mean_wind_speed'] for city in cities.values()])
     summary['coldest_place'] = min(cities, key=lambda index: cities[index]['mean_temp'])
     summary['warmest_place'] = max(cities, key=lambda index: cities[index]['mean_temp'])
-    summary['windiest_place'] = max(city['mean_wind_speed'] for city in cities.values())
+    summary['windiest_place'] = max(cities, key=lambda index: cities[index]['mean_wind_speed'])
 
 def save_result():
     from xml.dom import minidom
@@ -76,7 +76,8 @@ def save_result():
 
 def process(source_data="source_data"):
     # read source data
-    src_data = f"{os.getcwd()}/{source_data}"
+    # src_data = f"{os.getcwd()}/{source_data}"
+    src_data = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', source_data))
     for city_name in os.listdir(src_data):
         city_folder = os.path.join(src_data, city_name)
         for file in os.listdir(city_folder):
