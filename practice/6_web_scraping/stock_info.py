@@ -150,7 +150,7 @@ def read_blackrock(data, symbol):
 
     if blackrock:
         for field, value in zip(headers[1:], blackrock[1:]):
-            data.loc[symbol, field] = value
+            data.loc[symbol, field] = value # @TODO change to ints and date
     # Shares
     # Date Reported
     # % Out
@@ -173,10 +173,14 @@ def pretty_sheet(data):
     return pretty_table
 
 def create_sheets(data):
+    print(pretty_sheet(data))
     # 5 stocks with most youngest CEOs
     print(data.sort_values(by=['CEO Year Born']).head(2))
     print(data['CEO Year Born'].nlargest(n=2)) 
     print(data.nlargest(2, 'CEO Year Born')) # @TODO change to 5
+
+    # 10 largest holds of Blackrock Inc
+    print(data.nlargest(2, 'Shares'))
 
     #@TODO fix title to len of this
     # print(pretty_table.splitlines()[0])
