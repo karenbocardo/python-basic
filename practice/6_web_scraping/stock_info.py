@@ -43,6 +43,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 from tabulate import tabulate
 
+BASE_URL = 'https://finance.yahoo.com'
 
 def get_page(url):
     """Download a webpage and return a beautiful soup doc"""
@@ -61,13 +62,13 @@ def get_results_number(soup):
 def get_table_header(soup):
     """Return Table columns in list form """
     header = soup.findAll('th')
-    header_list = [item.text for index, item in enumerate(header)]
+    header_list = [item.text for item in header]
     return header_list
 
 def get_table_rows(soup):
     data = []
-    table = soup.find('table', attrs={'class':'W(100%)'})
-    table_body = table.find('tbody')
+    table = soup.table
+    table_body = table.tbody
 
     rows = table_body.find_all('tr')
     for row in rows:
@@ -80,44 +81,49 @@ def get_table_rows(soup):
 '''
 2. 10 stocks with best 52-Week Change. 52-Week Change placed on Statistics tab.
     Sheet's fields: Name, Code, 52-Week Change, Total Cash
-    statistics tab: https://finance.yahoo.com/quote/TSLA/key-statistics?p=TSLA
+    statistics tab example: https://finance.yahoo.com/quote/TSLA/key-statistics?p=TSLA
 '''
 '''
 3. 10 largest holds of Blackrock Inc. You can find related info on the Holders tab.
     Blackrock Inc is an investment management corporation.
     Sheet's fields: Name, Code, Shares, Date Reported, % Out, Value.
     All fields except first two should be taken from Holders tab.
-    holders tab: https://finance.yahoo.com/quote/TSLA/holders?p=TSLA
+    holders tab example: https://finance.yahoo.com/quote/TSLA/holders?p=TSLA
 '''
-
-def get_stock_ceo(symbol):
-    url = f'https://finance.yahoo.com/quote/{symbol}/profile?p={symbol}'
-    soup = get_page(url)
-    # header: ['Name', 'Title', 'Pay', 'Exercised', 'Year Born']
-    rows = get_table_rows(soup)
-    ceo = rows[0] # first row is ceo
-    return ceo
-
 
 '''
 1. 5 stocks with most youngest CEOs and print sheet to output. You can find CEO info in Profile tab of concrete stock.
     Sheet's fields: Name, Code, Country, Employees, CEO Name, CEO Year Born.
     profile tab: https://finance.yahoo.com/quote/TSLA/profile?p=TSLA
 '''
+def stock_tab_url(tab, symbol):
+    return f'{BASE_URL}/quote/{symbol}/{tab}?p={symbol}'
+
 def read_profile(data, symbol):
-    ceo = get_stock_ceo(symbol)
-    name = ceo[0]
-    year = ceo[4]
-    data.loc[symbol, 'CEO Name'] = name
-    data.loc[symbol, 'CEO Year Born'] = year
-    
+    url = stock_tab_url('profile', symbol)
+    soup = get_page(url)
+    # header: ['Name', 'Title', 'Pay', 'Exercised', 'Year Born']
+    rows = get_table_rows(soup)
+    ceo = rows[0] # first row is ceo
+
+    data.loc[symbol, 'CEO Name'] = ceo[0]
+    data.loc[symbol, 'CEO Year Born'] = ceo[4]
+
+    div = soup.find('div', attrs={'class':'Mb(25px)'})
+    info = div.findChildren("p" , recursive=False) # this div has two p children, left and right
+    info = [child.get_text(strip=True, separator='\n').splitlines() for child in info]
+    left = info[0]
+    right = info[1]
+    data.loc[symbol, 'Country'] = left[-3]
+    data.loc[symbol, 'Employees'] = int(right[-1].replace(',', ''))
+
 def read_all_stocks(data, rows):
     ceos = list()
     count = 1
     for symbol, row in data.head().iterrows(): # only first five for the moment
         #print(symbol, row['Name'])
         name = row['Name']
-        print(f'[{count}] reading {name}')
+        print(f'\n[{count}] reading {name}')
         read_profile(data, symbol)
         count += 1
     print(data.head())
@@ -134,11 +140,9 @@ def scrape_yahoo_most_active(url):
 
     data = pd.DataFrame([row[:2] for row in rows], columns=header[:2])
     data = data.set_index('Symbol')
-    print(data.head())
 
     read_all_stocks(data, rows)
 
-BASE_URL = 'https://finance.yahoo.com'
 # url = 'https://finance.yahoo.com/most-active'
-url = 'https://finance.yahoo.com/most-active?offset=0&count=100' # hundred most active
+url = f'{BASE_URL}/most-active?offset=0&count=100' # hundred most active
 scrape_yahoo_most_active(url)
