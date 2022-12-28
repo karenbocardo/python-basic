@@ -1,0 +1,10 @@
+=========================================== 5 stocks with most youngest CEOs ===========================================
++------+--------------------------------+---------------+-----------+----------------------------------+---------------+
+| Code |              Name              |    Country    | Employees |             CEO Name             | CEO Year Born |
++------+--------------------------------+---------------+-----------+----------------------------------+---------------+
+| SNAP |           Snap Inc.            | United States |   5661    |       Mr. Evan T. Spiegel        |     1991      |
+| RIVN |    Rivian Automotive, Inc.     | United States |   10422   | Mr. Robert Joseph Scaringe Ph.D. |     1984      |
+| META |      Meta Platforms, Inc.      | United States |   87314   |    Mr. Mark Elliot Zuckerberg    |     1984      |
+| RLX  |      RLX Technology Inc.       |     China     |   1235    |          Ms. Wang  Ying          |     1982      |
+| DNA  | Ginkgo Bioworks Holdings, Inc. | United States |    641    |         Dr. Jason  Kelly         |     1981      |
++------+--------------------------------+---------------+-----------+----------------------------------+---------------+

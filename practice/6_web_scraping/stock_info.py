@@ -44,6 +44,11 @@ import pandas as pd
 from tabulate import tabulate
 from lxml import html
 import os
+from datetime import datetime
+import re
+
+def file_with_path(filename):
+    return os.path.abspath(os.path.join(os.path.dirname( __file__ ), filename))
 
 def get_response(url):
     """Download a webpage and return a beautiful soup doc"""
@@ -95,12 +100,15 @@ def stock_tab_url(tab, symbol):
     return f'{BASE_URL}/quote/{symbol}/{tab}?p={symbol}'
 
 def read_profile(data, symbol):
+    # @TODO change to search row with 'CEO' in title,
+    # right now it is reading first row
     url = stock_tab_url('profile', symbol)
     soup = get_page(url)
     # header: ['Name', 'Title', 'Pay', 'Exercised', 'Year Born']
     rows = get_table_rows(soup)
     ceo = rows[0] # first row is ceo
 
+    ceo = [0 if x == 'N/A' else x for x in ceo]
     data.loc[symbol, 'CEO Name'] = ceo[0]
     data.loc[symbol, 'CEO Year Born'] = int(ceo[4])
 
@@ -110,19 +118,22 @@ def read_profile(data, symbol):
     left = info[0]
     right = info[1]
     data.loc[symbol, 'Country'] = left[-3]
-    data.loc[symbol, 'Employees'] = int(right[-1].replace(',', ''))
-
+    if right[-1] != ':':
+        data.loc[symbol, 'Employees'] = int(right[-1].replace(',', ''))
+    else:
+        data.loc[symbol, 'Employees'] = 0
 '''
 2. 10 stocks with best 52-Week Change. 52-Week Change placed on Statistics tab.
     Sheet's fields: Name, Code, 52-Week Change, Total Cash
     statistics tab example: https://finance.yahoo.com/quote/TSLA/key-statistics?p=TSLA
 '''
 def read_statistics(data, symbol):
+    # @TODO read statistics
     url = stock_tab_url('statistics', symbol)
     soup = get_page(url)
 
     rows = get_table_rows(soup, 1)
-    print(rows[0])
+    # print(rows[0])
     # total cash
     # 52-Week Change
 
@@ -139,7 +150,10 @@ def read_blackrock(data, symbol):
 
     headers = get_table_header(soup, 1) # ['Holder', 'Shares', 'Date Reported', '% Out', 'Value']
 
-    rows = get_table_rows(soup, 1)
+    if len(soup.findAll('table')) < 1:
+        return
+
+    rows = get_table_rows(soup, 1) # was not working with table, some soups only have one table
     
     blackrock = None
     # find blackrock
@@ -147,10 +161,20 @@ def read_blackrock(data, symbol):
         holder = row[0]
         if holder == 'Blackrock Inc.':
             blackrock = row
+    
+    # row = soup.findAll(string=re.compile('Blackrock Inc.'))[0].findPrevious()
 
     if blackrock:
+         # casting
+        # print(blackrock) # ['Blackrock Inc.', '171,860,959', 'Sep 29, 2022', '5.44%', '19,399,664,579']
+        
+        for x in [1, 4]:
+            blackrock[x] = int(blackrock[x].replace(',', ''))
+        blackrock[2] = datetime.strptime(blackrock[2], '%b %d, %Y')
+        blackrock[3] = float(blackrock[3].strip('%'))/100
+
         for field, value in zip(headers[1:], blackrock[1:]):
-            data.loc[symbol, field] = value # @TODO change to ints and date
+            data.loc[symbol, field] = value
     # Shares
     # Date Reported
     # % Out
@@ -159,31 +183,45 @@ def read_blackrock(data, symbol):
 def read_all_stocks(data, rows):
     ceos = list()
     count = 1
-    for symbol, row in data.head().iterrows(): # only first five for the moment
+    for symbol, row in data.head(40).iterrows(): # @TODO change to read all data and not just head
         #print(symbol, row['Name'])
         name = row['Name']
-        print(f'\n[{count}] reading {name}')
+        print(f'[{count}] reading {name}')
         read_profile(data, symbol)
         read_statistics(data, symbol)
         read_blackrock(data, symbol)
         count += 1
 
-def pretty_sheet(data):
+def pretty_sheet(title, data):
     pretty_table = tabulate(data.head(), headers = 'keys', tablefmt = 'pretty')
-    return pretty_table
+    lenght = len(pretty_table.splitlines()[0])
+    title_formatted = title.center(lenght, '=')
+    print(title_formatted)
+    print(pretty_table)
+    return title_formatted, pretty_table
+
+def write_string(file, string_list):
+    # open file in write mode
+    with open(file, 'w') as fp:
+        for item in string_list:
+            # write each item on a new line
+            #fp.write("%s\n" % item)
+            fp.write(f'{item}\n')
 
 def create_sheets(data):
-    print(pretty_sheet(data))
+    pretty_sheet(" all data ", data)
+
     # 5 stocks with most youngest CEOs
-    print(data.sort_values(by=['CEO Year Born']).head(2))
-    print(data['CEO Year Born'].nlargest(n=2)) 
-    print(data.nlargest(2, 'CEO Year Born')) # @TODO change to 5
+    title = ' 5 stocks with most youngest CEOs '
+    table = data.nlargest(5, 'CEO Year Born')
+    title, sheet = pretty_sheet(title, table[['Name', 'Country', 'Employees', 'CEO Name', 'CEO Year Born']])
+    write_string(file_with_path('5stocks.txt'), [title, sheet])
 
     # 10 largest holds of Blackrock Inc
-    print(data.nlargest(2, 'Shares'))
-
-    #@TODO fix title to len of this
-    # print(pretty_table.splitlines()[0])
+    title = ' 10 largest holds of Blackrock Inc '
+    table = data.nlargest(10, 'Value')
+    title, sheet = pretty_sheet(title, table[['Name', 'Shares', 'Date Reported', '% Out', 'Value']])
+    write_string(file_with_path('blackrock.txt'), [title, sheet])
 
 def count_url(base_url, count, offset):
     return f'{base_url}?count={count}&offset={offset}'
@@ -216,8 +254,19 @@ def scrape_yahoo_most_active(url):
 BASE_URL = 'https://finance.yahoo.com'
 # url = 'https://finance.yahoo.com/most-active'
 url = f'{BASE_URL}/most-active' 
-data = scrape_yahoo_most_active(url)
-create_sheets(data)
 
-filename = os.path.abspath(os.path.join(os.path.dirname( __file__ ), 'output.csv'))
-data.head().to_csv(filename, sep='\t', encoding='utf-8')
+scraping = True
+
+filename = file_with_path('output.csv')
+if scraping:
+    data = scrape_yahoo_most_active(url)
+
+    data = data.fillna(0)
+    data.Employees = data.Employees.astype(int)
+    data['CEO Year Born'] = data['CEO Year Born'].astype(int)
+
+    create_sheets(data)
+    data.head().to_csv(filename, sep='\t', encoding='utf-8', na_rep='NULL')
+else:
+    data = pd.read_csv(filename, sep='\t')
+    create_sheets(data)
