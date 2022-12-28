@@ -15,12 +15,16 @@ Example:
 """
 import os
 
-content = list()
+def read_write_values(folder="./files", res="result.txt"):
+    content = list()
+    for file in sorted(os.listdir(folder)):
+        with open(os.path.join(folder, file), encoding="utf-8") as f:
+            content.append(f.read())
+    
+    line = ", ".join(content)
+    with open(res, "w", encoding="utf-8") as f:
+        f.write(line)
+    return line
 
-folder = "./files"
-for file in os.listdir(folder):
-    with open(os.path.join(folder, file)) as f:
-        content.append(f.read())
-
-with open("result.txt", "w") as f:
-    f.write(", ".join(content))
+if __name__ == '__main__':
+    read_write_values()

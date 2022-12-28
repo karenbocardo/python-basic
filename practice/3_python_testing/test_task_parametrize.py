@@ -9,7 +9,26 @@ Task:
  1. Write a test with @pytest.mark.parametrize decorator.
  2. Find the buggy function and fix it.
 """
+# fibonacci numbers: https://planetmath.org/listoffibonaccinumbers
+import pytest
 
+fib_numbers = [
+    (1,1),
+    (2,1),
+    (3,2),
+    (4,3),
+    (5,5),
+    (6,8),
+    (7,13),
+    (8,21),
+    (9,34),
+    (10,55)
+]
+
+@pytest.mark.parametrize('n, res', fib_numbers)
+def test_fibonacci(n, res):
+  assert fibonacci_1(n) == res
+  assert fibonacci_2(n) == res
 
 def fibonacci_1(n):
     a, b = 0, 1
@@ -20,6 +39,6 @@ def fibonacci_1(n):
 
 def fibonacci_2(n):
     fibo = [0, 1]
-    for i in range(1, n+1):
+    for i in range(2, n+1): # bug was here, changed 1 to 2
         fibo.append(fibo[i-1] + fibo[i-2])
     return fibo[n]

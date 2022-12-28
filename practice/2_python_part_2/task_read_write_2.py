@@ -22,13 +22,19 @@ def generate_words(n=20):
 
     return words
 
-def write_words(words, file_number, encoding, separator, reverse=False):
+def write_words(words, filename, encoding, separator, reverse=False):
     if reverse:
-        words.reverse()
-    with open(f"file_{file_number}.txt", "w", encoding=encoding) as f:
+        words = reversed(words)
+    with open(filename, "w", encoding=encoding) as f:
         f.writelines(separator.join(words))
+
+def write_files(words, filenames):
+    one, two = filenames
+    write_words(words, one, "utf-8", "\n")
+    write_words(words, two, "CP1252", ",", True)
 
 if __name__ == '__main__':
     words = generate_words(3)
-    write_words(words, 1, "utf-8", "\n")
-    write_words(words, 2, "CP1252", ",", True)
+    print(f"{words=}")
+    filenames = [f"file_{x+1}.txt" for x in range(2)]
+    write_files(words, filenames)
