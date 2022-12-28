@@ -1,5 +1,6 @@
 from statistics import mean
 from lxml import etree
+import os
 
 
 def check_result(xml_path: str):
@@ -69,4 +70,6 @@ def check_result(xml_path: str):
 
 
 if __name__ == '__main__':
-    check_result(xml_path='./example_result.xml')
+    # check_result(xml_path='./example_result.xml')
+    xml_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'result.xml'))
+    check_result(xml_path)
