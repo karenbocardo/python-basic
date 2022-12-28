@@ -6,10 +6,11 @@ Examples:
      200, 'response data'
 """
 from typing import Tuple
-
+from urllib.request import urlopen
 
 def make_request(url: str) -> Tuple[int, str]:
-    ...
+    with urlopen("https://www.example.com") as response:
+        return response.getcode(), response.read()
 
 
 """
