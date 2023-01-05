@@ -61,7 +61,7 @@ class SchemaProcess:
 
         # clear path
         for f in os.listdir(args.path):
-            os.remove(os.path.join(dir, f))
+            os.remove(os.path.join(args.path, f))
 
         # files count: iterate
         for i in range(args.count):
