@@ -68,13 +68,6 @@ class ConsoleUtility:
             logging.error("number of files must be positive")
             sys.exit(1)
 
-        # filename
-
-        # file prefix
-        # data schema
-        # data lines
-        # clear path
-
         # multiprocessing
         if args.multiprocessing < 0 :
             logging.error("number of processes for multiprocessing must be positive")
