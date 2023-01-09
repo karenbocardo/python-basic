@@ -17,6 +17,7 @@ class ConsoleUtility:
         # parser
         self.parser = argparse.ArgumentParser(prog="capstone", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
         self.default = self.read_defaults()
+        self.pool = None
         self.setup_args()
         self.args = self.parse_args()
         self.analyze_args()
@@ -77,7 +78,7 @@ class ConsoleUtility:
         elif args.multiprocessing > os.cpu_count(): 
             args.multiprocessing = os.cpu_count()
 
-        p = multiprocessing.Pool(processes=args.multiprocessing)
+        self.pool = multiprocessing.Pool(processes=args.multiprocessing)
 
 
     def parse_str_to_bool(self, string: str):
