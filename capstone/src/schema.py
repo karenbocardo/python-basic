@@ -5,8 +5,6 @@ import json
 import sys
 import uuid
 import random
-import builtins
-from datetime import datetime
 import time
 
 logging.basicConfig(level=logging.NOTSET)
@@ -55,7 +53,7 @@ class SchemaProcess:
         if not os.path.exists(args.path):
             logging.error("path does not exist")
             sys.exit(1)
-        elif os.path.isdir(args.path): 
+        elif not os.path.isdir(args.path): 
             logging.error("path is not a directory")
             sys.exit(1)
         
