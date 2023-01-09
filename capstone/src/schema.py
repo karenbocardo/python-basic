@@ -50,10 +50,13 @@ class SchemaProcess:
         args = self.args
         
         logging.info("checking path")
-        # create folder if it doesnt exist
-        # @TODO check absolute path or from current directory
+        # check if such path or not; if path exist and it is not a directory - exit with error log.
         if not os.path.exists(args.path):
-            os.makedirs(args.path)
+            logging.error("path does not exist")
+            sys.exit(1)
+        elif os.path.isdir(args.path): 
+            logging.error("path is not a directory")
+            sys.exit(1)
         
         # printing or saving to files
         printing = False
@@ -87,10 +90,6 @@ class SchemaProcess:
                     else: filename = self.complete_filename(args.name, None, i)
                     with open(os.path.join(args.path, filename), "w") as outfile:
                         json.dump(new_data, outfile, indent=4)
-
-
-        # data lines ?
-
 
     def parse_schema(self):
         '''
