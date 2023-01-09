@@ -54,12 +54,14 @@ class ConsoleUtility:
                             help="The number of processes used to create files. \nDivides the “files_count” value equally and starts N processes to create an equal number of files in parallel. \nOptional argument. Default value: 1.")
     
     def parse_args(self):
+        logging.info("parsing arguments")
         # parsing user defined arguments
         parser = self.parser
         logging.info("parsing args")
         return parser.parse_args()
     
     def analyze_args(self):
+        logging.info("analyzing arguments")
         args = self.args
         # path
 

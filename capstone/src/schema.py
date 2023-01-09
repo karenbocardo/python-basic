@@ -32,6 +32,7 @@ class SchemaProcess:
             sys.exit(1)
     
     def complete_filename(self, filename, prefix, i):
+        logging.info(f"creating filename for file {i+1}")
         match prefix:
             case 'count':
                 new_prefix = i + 1
@@ -70,15 +71,18 @@ class SchemaProcess:
         all files in `path_to_save_files` that match `file_name` will be deleted.
         '''
         for f in os.listdir(args.path):
+            logging.info("clearing path")
             if args.name in f:
                 os.remove(os.path.join(args.path, f))
 
         # files count: iterate
         for i in range(args.count):
+                logging.info(f"generating data, file {i+1}")
                 new_data = [self.parse_schema() for i in range(args.lines)]
                 if len(new_data) == 1: new_data = new_data[0]
 
                 if printing:
+                    logging.info("printing data to console")
                     json_object = json.dumps(new_data, indent = 4) 
                     print(json_object)
                 else:
@@ -86,6 +90,7 @@ class SchemaProcess:
                     # filename: first part of filename includes this
                     # file prefix: last part of filename includes this
                     # join path and filename_prefix
+                    logging.info("saving data into files")
                     if prefix: filename = self.complete_filename(args.name, args.prefix, i)
                     else: filename = self.complete_filename(args.name, None, i)
                     with open(os.path.join(args.path, filename), "w") as outfile:
