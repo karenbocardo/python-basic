@@ -57,17 +57,23 @@ class SchemaProcess:
         
         # printing or saving to files
         printing = False
+        prefix = True
         if args.count == 0: printing = True
+        if args.count == 1: prefix = False
 
         # clear path
+        '''
+        If this flag is on, before the script starts creating new data files, 
+        all files in `path_to_save_files` that match `file_name` will be deleted.
+        '''
         for f in os.listdir(args.path):
-            os.remove(os.path.join(args.path, f))
+            if args.name in f:
+                os.remove(os.path.join(args.path, f))
 
         # files count: iterate
         for i in range(args.count):
-                pass
-        
-                new_data = self.parse_schema()
+                new_data = [self.parse_schema() for i in range(args.lines)]
+                if len(new_data) == 1: new_data = new_data[0]
 
                 if printing:
                     json_object = json.dumps(new_data, indent = 4) 
@@ -77,9 +83,11 @@ class SchemaProcess:
                     # filename: first part of filename includes this
                     # file prefix: last part of filename includes this
                     # join path and filename_prefix
-                    filename = self.complete_filename(args.name, args.prefix, i)
+                    if prefix: filename = self.complete_filename(args.name, args.prefix, i)
+                    else: filename = self.complete_filename(args.name, None, i)
                     with open(os.path.join(args.path, filename), "w") as outfile:
-                        json.dump(new_data, outfile)
+                        json.dump(new_data, outfile, indent=4)
+
 
         # data lines ?
 
